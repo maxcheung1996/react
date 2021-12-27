@@ -1,24 +1,28 @@
 import React, { Component } from "react";
 
 class Counter extends Component {
-  State = {
-    value: this.props.counter.value,
-    countStyle: "m-2 badge badge-",
-  };
+  componentDidUpdate(prevProps, prevState) {
+    console.log("prevProps", prevProps);
+    console.log("prevState", prevState);
+    if (prevProps.counter.value !== this.props.counter.value) {
+      //do a ajax call
+    }
+  }
 
-  handleIncrement = (product) => {
-    this.setState({ value: (this.State.value += 1) });
-  };
+  componentWillUnmount() {
+    console.log("Counter - Unmount");
+  }
 
   render() {
-    console.log(this.props);
+    console.log("Counter - Rendered");
+
     return (
       <div>
         <h4>{this.props.id}</h4>
-        <span className={this.formatStyle()}>{this.State.value}</span>
+        <span className={this.formatStyle()}>{this.formatCount()}</span>
         <button
           onClick={() => {
-            this.handleIncrement(1);
+            this.props.onIncrement(this.props.counter);
           }}
           className="btn btn-primary m-2"
         >
@@ -35,9 +39,14 @@ class Counter extends Component {
   }
 
   formatStyle() {
-    const { value: count } = this.State;
-    const { countStyle } = this.State;
-    return count === 0 ? countStyle + "warning" : countStyle + "primary";
+    const { value } = this.props.counter;
+    const { countStyle } = this.props.counter;
+    return value === 0 ? countStyle + "warning" : countStyle + "primary";
+  }
+
+  formatCount() {
+    const { value } = this.props.counter;
+    return value === 0 ? "zero" : value;
   }
 }
 
